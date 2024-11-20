@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Dispositivo</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <link rel="stylesheet" href="/styles.css">
+
+  <h2>Editar Dispositivo</h2>
+  <form id="buscarDispositivoId">
+    <label for="dispositivo_id">ID del Dispositivo:</label>
+    <input type="dispositivo_id" id="dispositivo_id-id" required>
+    <button type="button" onclick="buscarDispositivo()">Buscar</button>
+  </form>
+  
+  <form id="editarDispositivoForm" style="display: none;" method="POST" action="/editar-dispositivo">
+    <input type="hidden" id="dispositivo_id_h" name="id">
+    
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="Descripcion">Descripcion:</label>
+    <input type="number" id="Descripcion" name="Descripcion" required>
+
+    <label for="estado">Estado</label>
+    <input type="number" id="estado" name="estado" required>
+
+    <label for="usuario_id">Usuario_id</label>
+    <input type="text" id="usuario_id" name="usuario_id" required>
+
+    <button type="submit">Guardar Cambios</button>
+    <button type="button" onclick="eliminarDispositivo()">Eliminar Dispositivo</button>
+  </form>
+
+  <script>
+    function buscarDispositivo() {
+      const dispositivoId = document.getElementById('dispositivo_id').value;
+      fetch(`/obtener-dispositivo/${dispositivoId}`)
+        .then(response => {
+          if (!response.ok) throw new Error('Dispositivo no encontrado');
+          return response.json();
+        })
+        .then(data => {
+          document.getElementById('editarDispositivoForm').style.display = 'block';
+          document.getElementById('dispositivo-id-hidden').value = data.id;
+          document.getElementById('nombre').value = data.nombre;
+          document.getElementById('descripcion').value = data.descripcion;
+          document.getElementById('estado').value = data.estado;
+          document.getElementById('usuario_id').value = data.usuario_id;
+        })
+        .catch(error => alert(error.message));
+    }
+
+    function eliminarDispositivo() {
+      const dispositivoId = document.getElementById('dispositivo-id-hidden').value;
+      if (confirm('¿Estás seguro de que deseas eliminar este dispositivo?')) {
+        fetch(`/eliminar-dispositivo/${dispositivoId}`, {
+          method: 'DELETE'
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('Dispositivo eliminado correctamente.');
+            window.location.href = '/dispositivo'; 
+          } else {
+            alert('Error al eliminar el dispositivo.');
+          }
+        })
+        .catch(error => console.error('Error al eliminar el dispositivo:', error));
+      }
+    }
+  </script>
+
+  <button onclick="window.location.href='/'">Volver</button>
+</body>
+</html>
