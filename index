@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Gestión de Pacientes</title>
+</head>
+<body>
+  <h2>Bienvenido a la Gestión de Dispositivos</h2>
+  <a href="/logout">Cerrar Sesión</a>
+  <!-- Formularios y botones de insertar/consultar médicos y pacientes -->
+</body>
+</html>
+
+
+<body>
+  <!-- Incluir barra de navegación desde navbar.html -->
+  <div id="navbar"></div>
+
+  <script>
+      // Insertar el contenido de navbar.html en el elemento con id "navbar"
+      fetch('/navbar.html')
+          .then(response => response.text())
+          .then(data => {
+              document.getElementById('navbar').innerHTML = data;
+          })
+          .catch(error => console.error('Error cargando el navbar:', error));
+  </script>
+</body>
+</html>
+
+<script>
+  // Solicitar el tipo de usuario y ajustar el menú en función de este
+  fetch('/tipo-usuario')
+      .then(response => response.json())
+      .then(data => {
+          const menu = document.getElementById('menu');
+          const tipoUsuario = data.tipo_usuario;
+
+          // Agregar opciones de menú según el tipo de usuario
+          if (tipoUsuario === 'admin') {
+              menu.innerHTML += '<li><a href="/ver-usuarios">Ver Usuarios</a></li>';
+              menu.innerHTML += '<li><a href="/gestionar-registros">Gestionar Registros</a></li>';
+              menu.innerHTML += '<li><a href="/editar-dispositivo">Editar Dispositivo</a></li>';
+          } else if (tipoUsuario === 'medico') {
+              menu.innerHTML += '<li><a href="/ver-dispositivo">Ver Dispositivo</a></li>';
+              menu.innerHTML += '<li><a href="/editar-dispositivo">Editar Dispositivo</a></li>';
+          }
+          // Opción de cerrar sesión para todos los tipos de usuario
+          menu.innerHTML += '<li><a href="/logout">Cerrar Sesión</a></li>';
+      })
+      .catch(error => console.error('Error obteniendo el tipo de usuario:', error));
+</script>
+
+<body>
+  <h1>Bienvenido a la Gestión de Dispositivos</h1>
+
+<h2>Registrar Dispositivo</h2>
+<form action="/insertar-dispositivo" method="POST">
+  <label for="nombre_dispositivo">Nombre del dispositivo</label>
+  <input type="text" id="nombre_dispositivo" name="nombre_dispositivo">
+
+  <label for="descripcion">Descripcion</label>
+  <input type="text" id="descripcion" name="descripcion">
+
+  <label for="estado">Estado</label>
+  <input type="text" id="estado" name="estado">
+
+  <label for="usuario_id">Usuario Id</label>
+  <input type="text" id="usuario_id" name="usuario_id">
+
+  <button type="submit">Guardar dispositivo</button>
+</form>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Principal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+  <button onclick="window.location.href='/ver-dispositivos'">Ver Dispositivos Guardados</button>  
+</body>
+</html>
